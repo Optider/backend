@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  CreateOrganisationDto,
-  FindOrganisationDto,
-  OrganisationResponseDto,
-} from './dto/organisation.dto';
+import { CreateOrganisationDto } from './dto/organisation.dto';
 import {
   Organisation,
   OrganisationDocument,
@@ -18,21 +14,14 @@ export class OrganisationService {
     private organisationModel: Model<OrganisationDocument>,
   ) {}
 
-  getOrganisation(walletId: string): FindOrganisationDto {
-    const tempResponse = new FindOrganisationDto();
-    console.log(`one org ${walletId}`);
-    return tempResponse;
+  async getOrganisation(walletId: string): Promise<Organisation> {
+    return this.organisationModel.findOne({ walletId: walletId }).exec();
   }
-
-  getOrganisations(): FindOrganisationDto[] {
-    const tempResponse = [new FindOrganisationDto()];
-    console.log(`all orgs`);
-    return tempResponse;
+  async getOrganisations(): Promise<Organisation[]> {
+    return this.organisationModel.find().exec();
   }
-
-  createOrganisation(payload: CreateOrganisationDto): Promise<Organisation> {
+  async createOrganisation(payload: CreateOrganisationDto) {
     const createdOrganisation = new this.organisationModel(payload);
-    console.log(`created ${JSON.stringify(payload)}`);
     return createdOrganisation.save();
   }
 }
