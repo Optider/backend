@@ -12,7 +12,7 @@ export class Organisation {
   website: string;
 
   @Prop()
-  phone: number;
+  phone: string;
 
   @Prop()
   email: string;
